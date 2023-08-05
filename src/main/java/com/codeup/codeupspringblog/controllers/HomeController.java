@@ -1,7 +1,9 @@
 package com.codeup.codeupspringblog.controllers;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -11,4 +13,16 @@ public class HomeController {
     public String index() {
         return "This is the landing page!";
     }
+
+    @GetMapping("/home")
+    public String welcome() {
+        return "home";
+    }
+
+    @GetMapping("/hello/{name}")
+    public String sayHello(@PathVariable String name, Model model) {
+        model.addAttribute("name", name);
+        return "hello";
+    }
+
 }
