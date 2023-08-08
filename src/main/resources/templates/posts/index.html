@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="partials/header :: header">
-  <title>Home</title>
+    <title>All Posts</title>
 </head>
 <body>
 <nav th:replace="partials/navbar :: navbar"></nav>
-<h1>This is the home page</h1>
-
+<h1>All Posts</h1>
+<div th:each="post : ${posts}">
+    <a th:href="@{/posts/{id} (id = ${post.id})}"><h1 th:text="${post.title}"></h1></a>
+    <p th:text="${post.body}"></p>
+</div>
 <footer th:replace="partials/footer :: footer"></footer>
 </body>
 </html>
