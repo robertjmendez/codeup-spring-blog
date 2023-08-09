@@ -29,13 +29,10 @@ public class PostController {
 
     @GetMapping("/posts/{id}")
     public String individualPost(@PathVariable long id, Model model) {
-        Optional<Post> postOptional = postDao.findById(id);
-        if (postOptional.isPresent()) {
-            model.addAttribute("post", postOptional.get());
-            return "posts/show";
-        } else {
-            return "redirect:/posts";
-        }
+        Post post = postDao.findPostById(id);
+        model.addAttribute("post", post);
+        return "posts/show";
+
     }
 
     @GetMapping("/posts/create")
