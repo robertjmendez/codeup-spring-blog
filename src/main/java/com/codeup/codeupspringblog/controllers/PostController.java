@@ -49,7 +49,7 @@ public class PostController {
 
     @PostMapping("/posts/create")
     public String createPost(Post post) {
-        User user = userDao.getById(1L);
+        User user = userDao.findById(1L).get();
         post.setUser(user);
         postDao.save(post);
         return "redirect:/posts";
