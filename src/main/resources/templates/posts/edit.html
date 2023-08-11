@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head th:replace="partials/header :: header">
-  <title>Create a New Post</title>
+  <title>Edit Post</title>
 </head>
 <body>
 <nav th:replace="partials/navbar :: navbar"></nav>
-<h1>Create a New Post</h1>
-<form th:action="@{/posts/create}" th:method="post" th:object="${post}">
+<h1>Edit Post</h1>
+<form th:action="@{/posts/update}" th:method="post" th:object="${post}">
+  <input type="hidden" th:field="*{id}">
   <label for="title">Title:</label>
-  <input th:field="*{title}" id="title" required />
+  <input type="text" th:field="*{title}" id="title" required>
   <br>
   <label for="body">Body:</label>
   <textarea th:field="*{body}" id="body" required></textarea>
   <br>
-  <button type="submit">Create Post</button>
+  <button type="submit">Update Post</button>
 </form>
 <footer th:replace="partials/footer :: footer"></footer>
 </body>
 </html>
-
