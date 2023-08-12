@@ -9,6 +9,7 @@
 <h1 th:text="${post.title}"></h1>
 <p th:text="${post.body}"></p>
 <p>Posted by: <span th:text="${post.user.email}"></span></p>
+<a th:href="@{/posts/{id}/edit(id=${post.id})}">Edit Post</a>
 
 <footer th:replace="partials/footer :: footer"></footer>
 </body>
