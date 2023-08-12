@@ -55,33 +55,72 @@ public class PostController {
     @PostMapping("/posts/create")
     public String createPost(@ModelAttribute Post post) {
 //        User user = userDao.findById(1L).get();
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User loggedInUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        post.setUser(user);
+        post.setUser(loggedInUser);
         postDao.save(post);
 
-        emailService.sendEmail(user.getEmail(), "New Post Created!", "You have successfully created a new post titled: " + post.getTitle());
+        emailService.sendEmail(loggedInUser.getEmail(), "New Post Created!", "You have successfully created a new post titled: " + post.getTitle());
 
         return "redirect:/posts";
     }
+
+//    @GetMapping("/posts/{id}/edit")
+//    public String editPostForm(@PathVariable long id, Model model) {
+//        Post post = postDao.findPostById(id);
+//        if (post != null) {
+//            model.addAttribute("post", post);
+//            return "posts/edit";
+//        } else {
+//            return "redirect:/posts";
+//        }
+//    }
+//
+//    @PostMapping("/posts/update")
+//    public String updatePost(@ModelAttribute Post post) {
+//        User user = userDao.findById(1L).get();
+//        post.setUser(user);
+//        postDao.save(post);
+//        return "redirect:/posts";
+//    }
 
     @GetMapping("/posts/{id}/edit")
     public String editPostForm(@PathVariable long id, Model model) {
         Post post = postDao.findPostById(id);
-        if (post != null) {
-            model.addAttribute("post", post);
-            return "posts/edit";
-        } else {
+        if (post == null) {
             return "redirect:/posts";
         }
+
+        User loggedInUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (!post.getUser().getId().equals(loggedInUser.getId())) {
+            return "redirect:/posts";
+        }
+
+        model.addAttribute("post", post);
+        return "posts/edit";
     }
 
     @PostMapping("/posts/update")
     public String updatePost(@ModelAttribute Post post) {
-        User user = userDao.findById(1L).get();
-        post.setUser(user);
-        postDao.save(post);
+        Post existingPost = postDao.findPostById(post.getId());
+
+        if (existingPost == null) {
+            return "redirect:/posts";
+        }
+
+        User loggedInUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (!existingPost.getUser().getId().equals(loggedInUser.getId())) {
+            return "redirect:/posts";
+        }
+
+        existingPost.setTitle(post.getTitle());
+        existingPost.setBody(post.getBody());
+
+        postDao.save(existingPost);
         return "redirect:/posts";
     }
+
 
 }
